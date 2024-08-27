@@ -1,7 +1,8 @@
-import './style.css'
+import './style.css';
+import './webgl';
 import Lenis from '@studio-freight/lenis';
 import { gsap, ScrollTrigger, Power1 } from 'gsap/all';
-import SplitType from 'split-type'
+import SplitType from 'split-type';
 
 const lenis = new Lenis();
 
@@ -15,28 +16,74 @@ requestAnimationFrame(raf);
 ///////////////////////////////////////////////////////
 
 const mm = gsap.matchMedia();
+gsap.registerPlugin(ScrollTrigger);
 
-mm.add("(max-width: 480px)", () => {
-  gsap.to("#hero", {
-    y: "10%",
-    borderRadius: "20px",
-    width: "85%",
-    height: "100vh",
-    duration: 2,
+const loadTl = gsap.timeline();
+
+loadTl.to("#easer", {
+  scale: 1.5,
+  duration: 0.5,
+  yoyo: true,
+  ease: "power1.inOut",
+  transformOrigin: "center",
+  repeat: -1,
+})
+
+window.addEventListener("load", () => {
+  loadTl.to("#easer", {
+    scale: 100,
     delay: 2,
-    ease: "power1.inOut",
-  });
-}).add("(min-width: 480px)", () => {
-  gsap.to("#hero", {
-    y: "10%",
-    borderRadius: "20px",
-    width: "95%",
-    height: "100vh",
     duration: 2,
-    delay: 2,
-    ease: "power1.inOut",
+    transformOrigin: "center",
+    onComplete: () => {
+      document.querySelector("#preloader").classList.add("ease");
+    }
+  })
+
+  mm.add("(max-width: 480px)", () => {
+    loadTl.to("#hero", {
+      y: "10%",
+      borderRadius: "20px",
+      width: "85%",
+      height: "100vh",
+      duration: 2,
+      ease: "power1.inOut",
+    }).to("#preloader", {
+      opacity: 0,
+      duration: 0.5
+    }, "-=1").to("#preloader", {
+      visibility: "hidden",
+      duration: 0.5
+    })
+  
+    ScrollTrigger.create({
+      onUpdate: (self) => {
+        productHero.style.top = `${27 + (self.progress*170)}%`;
+      }
+    });
+  }).add("(min-width: 480px)", () => {
+    loadTl.to("#hero", {
+      y: "10%",
+      borderRadius: "20px",
+      width: "95%",
+      height: "100vh",
+      duration: 2,
+      ease: "power1.inOut",
+    }).to("#preloader", {
+      opacity: 0,
+      duration: 0.5
+    }, "-=1").to("#preloader", {
+      visibility: "hidden",
+      duration: 0.5
+    })
+  
+    ScrollTrigger.create({
+      onUpdate: (self) => {
+        productHero.style.top = `${48 + (self.progress*170)}%`;
+      }
+    });
   });
-});
+})
 
 const hamburger = document.getElementById("hamburger");
 const navbar = document.getElementById("navbar");
@@ -76,13 +123,28 @@ targetElementsForSplits.forEach((button) => {
   });
 });
 
+const targetTextElsForFadeUp = document.querySelectorAll(".split-text-slide-up");
+
+targetTextElsForFadeUp.forEach((el, i) => {
+  const splitText = new SplitType(el, { type: "chars, words" });
+  gsap.from(splitText.words, {
+    scrollTrigger: {
+      trigger: el,
+      start: "top 60%",
+      end: "top bottom",
+      toggleActions: "restart none none none",
+    },
+    y: "100",
+    stagger: 0.04,
+    opacity: 0
+  })
+})
+
 const productHero = document.getElementById("product-hero");
 
 let lastScrollTop = 0;
 window.addEventListener('scroll', () => {
   let scrollTop = window.scrollY || document.documentElement.scrollTop;
-  // productHero.style.top = `${40+(scrollTop*(scrollTop/25000))}%`;
-  // console.log(40+(scrollTop*(scrollTop/25000)));
   (scrollTop > lastScrollTop) ? navbar.classList.add('hidden') : navbar.classList.remove('hidden');
   lastScrollTop = scrollTop;
 });
@@ -98,8 +160,6 @@ hamburger.addEventListener("click", () => {
     tl.timeScale(4).reverse();
   }
 });
-
-gsap.registerPlugin(ScrollTrigger);
 
 const videoPlayer = document.getElementById("video-player");
 const items = document.querySelectorAll(".item");
@@ -164,3 +224,14 @@ gsap.to("[clip-path='url(#__lottie_element_11)']", {
   repeat: -1,
   ease: "none",
 });
+
+// why-fincra
+
+gsap.from("#why-fincra .tease", {
+  scrollTrigger: "#why-fincra",
+  x: 100,
+  opacity: 0,
+  duration: 1,
+  ease: Power1.easeInOut,
+  stagger: 0.3,
+})

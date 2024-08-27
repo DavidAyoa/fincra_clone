@@ -82,7 +82,6 @@ body {
   background-color: white;
   font-family: "Sailec", Helvetica, sans-serif;
   overflow-x: hidden;
-  min-height: 200vh;
 }
 
 .flex {
@@ -128,25 +127,40 @@ body {
   font-weight: 700;
 }
 
-/* #preloader {
+#preloader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100dvh;
+  z-index: 1000;
+  overflow: hidden;
+  background-color: var(--darker-primary);
 }
 
 #preloader #easer {
-  width: 100%;
-  height: 80%;
-  background-color: var(--darker-primary);
-  transition: height 300ms;
+  position: absolute;
+  top: 47%;
+  left: 47%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--white);
 }
 
-#preloader #easer.ease {
-  height: 5%;
-} */
+#preloader.ease {
+  background-color: var(--white);
+}
 
+#preloader-logo-container {
+  position: absolute;
+  top: 47%;
+  left: 47%;
+  background-color: var(--white);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
 
 #logo img {
   width: 100%;
@@ -431,8 +445,8 @@ main {
 
 #product-hero {
   position: absolute;
-  top: 40%;
-  background-image: url("./imgs/Fincra-Products-hero-3.png");
+  top: 48%;
+  background-image: url("/Fincra-Products-hero-3.png");
   background-attachment: fixed;
   background-size: contain;
   background-position: center center;
@@ -673,6 +687,7 @@ main {
   color: var(--gray);
   padding: 5% 10%;
   background-color: #fcf0d4;
+  overflow-x: hidden;
 }
 
 #why-fincra h2.title {
@@ -912,7 +927,17 @@ main {
   }
 }
 
-@media (max-width: 720px) {
+@media (min-width: 480px) and (max-width: 768px) {
+  #content-grid-item-1 h2.title {
+    font-size: 6vw;
+  }
+
+  #product-hero {
+    top: 48%;
+  }
+}
+
+@media (max-width: 768px) {
   .dd-link {
     font-size: 7vw !important;
   }
@@ -922,6 +947,8 @@ main {
   }
 
   #hero #content {
+    left: 9.8vw;
+    width: 80%;
     align-items: center;
     justify-content: center;
     grid-template-columns: 1fr;

@@ -135,8 +135,10 @@ targetTextElsForFadeUp.forEach((el, i) => {
       toggleActions: "restart none none none",
     },
     y: "100",
-    stagger: 0.04,
-    opacity: 0
+    stagger: 0.1,
+    opacity: 0,
+    ease: "back.out",
+    duration: 0.5
   })
 })
 
@@ -228,10 +230,15 @@ gsap.to("[clip-path='url(#__lottie_element_11)']", {
 // why-fincra
 
 gsap.from("#why-fincra .tease", {
-  scrollTrigger: "#why-fincra",
+  scrollTrigger: {
+    trigger: "#why-fincra",
+    start: "top 20%",
+    end: "top bottom",
+    toggleActions: "restart none none none",
+  },
   x: 100,
+  stagger: 0.4,
   opacity: 0,
-  duration: 1,
-  ease: Power1.easeInOut,
-  stagger: 0.3,
+  ease: "back.out",
+  duration: 1
 })

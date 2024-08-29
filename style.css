@@ -581,7 +581,7 @@ main {
   transform: translateX(5px);
 }
 
-.hide-on-safari {
+body.safari .hide-on-safari {
   display: none;
 }
 

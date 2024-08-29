@@ -1,7 +1,7 @@
 import './style.css';
 import './webgl';
 import Lenis from '@studio-freight/lenis';
-import { gsap, ScrollTrigger, Power1 } from 'gsap/all';
+import { gsap, ScrollTrigger } from 'gsap/all';
 import SplitType from 'split-type';
 
 const lenis = new Lenis();
@@ -18,72 +18,93 @@ requestAnimationFrame(raf);
 const mm = gsap.matchMedia();
 gsap.registerPlugin(ScrollTrigger);
 
-const loadTl = gsap.timeline();
+const preloadFincra = () => {
+  const tl = gsap.timeline({ defaults: { ease: 'power1.inOut'}});
 
-loadTl.to("#easer", {
-  scale: 1.5,
-  duration: 0.5,
-  yoyo: true,
-  ease: "power1.inOut",
-  transformOrigin: "center",
-  repeat: -1,
-})
-
-window.addEventListener("load", () => {
-  loadTl.to("#easer", {
-    scale: 100,
-    delay: 2,
-    duration: 2,
+  tl.to("#easer", {
+    scale: 1.5,
+    duration: 0.5,
+    yoyo: true,
+    ease: "power1.inOut",
     transformOrigin: "center",
-    onComplete: () => {
-      document.querySelector("#preloader").classList.add("ease");
-    }
-  })
+    repeat: -1,
+  });
 
-  mm.add("(max-width: 480px)", () => {
-    loadTl.to("#hero", {
-      y: "10%",
-      borderRadius: "20px",
-      width: "85%",
-      height: "100vh",
-      duration: 2,
-      ease: "power1.inOut",
-    }).to("#preloader", {
-      opacity: 0,
-      duration: 0.5
-    }, "-=1").to("#preloader", {
-      visibility: "hidden",
-      duration: 0.5
+  window.addEventListener("load", () => {
+    tl.to("#easer", {
+      scale: 100,
+      delay: 2,
+      duration: 1,
+      transformOrigin: "center",
+      onComplete: () => {
+        document.querySelector("#preloader").classList.add("ease");
+      }
     })
   
-    ScrollTrigger.create({
-      onUpdate: (self) => {
-        productHero.style.top = `${27 + (self.progress*170)}%`;
-      }
-    });
-  }).add("(min-width: 480px)", () => {
-    loadTl.to("#hero", {
-      y: "10%",
-      borderRadius: "20px",
-      width: "95%",
-      height: "100vh",
-      duration: 2,
-      ease: "power1.inOut",
-    }).to("#preloader", {
-      opacity: 0,
-      duration: 0.5
-    }, "-=1").to("#preloader", {
-      visibility: "hidden",
-      duration: 0.5
-    })
-  
-    ScrollTrigger.create({
-      onUpdate: (self) => {
-        productHero.style.top = `${48 + (self.progress*170)}%`;
-      }
+    mm.add("(max-width: 480px)", () => {
+      tl.to("#hero", {
+        y: "10%",
+        borderRadius: "20px",
+        width: "85%",
+        height: "100vh",
+        duration: 2,
+      }).to("#preloader", {
+        opacity: 0,
+        duration: 0.5
+      }, "-=1").to("#preloader", {
+        visibility: "hidden",
+        duration: 0.5,
+        // onComplete: () => tl.pause()
+      }).from('#hero #content > div, #hero #content > h4', {
+        y: -50,
+        opacity: 0,
+        stagger: 0.5,
+        duration: 0.5
+      })
+    
+      ScrollTrigger.create({
+        onUpdate: (self) => {
+          productHero.style.top = `${27 + (self.progress*170)}%`;
+        }
+      });
+    }).add("(min-width: 480px)", () => {
+      tl.to("#hero", {
+        y: "10%",
+        borderRadius: "20px",
+        width: "95%",
+        height: "100vh",
+        duration: 2,
+      }).to("#preloader", {
+        opacity: 0,
+        duration: 0.5
+      }, "-=1").to("#preloader", {
+        visibility: "hidden",
+        duration: 0.5,
+        // onComplete: () => tl.pause()
+      }).from('#hero #content > div, #hero #content > h4', {
+        y: -50,
+        opacity: 0,
+        stagger: 0.5,
+        duration: 0.5
+      })
+    
+      ScrollTrigger.create({
+        onUpdate: (self) => {
+          productHero.style.top = `${48 + (self.progress*170)}%`;
+        }
+      });
     });
   });
-})
+
+  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if (isSafari) {
+    document.body.classList.add('safari');
+  }
+  
+}
+
+preloadFincra();
+
 
 const hamburger = document.getElementById("hamburger");
 const navbar = document.getElementById("navbar");

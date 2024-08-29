@@ -96,9 +96,14 @@ const preloadFincra = () => {
     });
   });
 
-  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  if (isSafari) {
+  const isChrome = navigator.userAgent.indexOf('Chrome') !== -1;
+  const isSafari = navigator.userAgent.indexOf('Safari') !== -1;
+
+  if (isChrome && isSafari) {
+    console.log("is Chrome")
+  } else if (isSafari) {
     document.body.classList.add('safari');
+    console.log("is Safari")
   }
   
 }

@@ -1,4 +1,4 @@
-import "./style.css";
+import "./main.css";
 import "./webgl";
 import Lenis from "@studio-freight/lenis";
 import { gsap, ScrollTrigger } from "gsap/all";
@@ -17,6 +17,13 @@ requestAnimationFrame(raf);
 
 const mm = gsap.matchMedia();
 gsap.registerPlugin(ScrollTrigger);
+
+
+const productHero = document.getElementById("content");
+
+const targetTextElsForFadeUp = document.querySelectorAll(
+  ".split-text-slide-up"
+);
 
 const preloadFincra = () => {
   const tl = gsap.timeline({ defaults: { ease: "power1.inOut" } });
@@ -45,8 +52,8 @@ const preloadFincra = () => {
       tl.to("#hero", {
         y: "10%",
         borderRadius: "20px",
-        width: "85%",
-        height: "100vh",
+        width: "90%",
+        height: "60vh",
         duration: 2,
       })
         .to(
@@ -60,7 +67,6 @@ const preloadFincra = () => {
         .to("#preloader", {
           visibility: "hidden",
           duration: 0.5,
-          // onComplete: () => tl.pause()
         })
         .from("#hero #content > div, #hero #content > h4", {
           y: -50,
@@ -71,10 +77,45 @@ const preloadFincra = () => {
 
       ScrollTrigger.create({
         onUpdate: (self) => {
-          productHero.style.top = `${27 + self.progress * 170}%`;
+          productHero.style.top = `${self.progress * 400}%`;
         },
       });
-    }).add("(min-width: 480px)", () => {
+
+      targetTextElsForFadeUp.forEach((el) => {
+        const splitText = new SplitType(el, { type: "chars, words" });
+        gsap.from(splitText.words, {
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "top bottom",
+            toggleActions: "restart none none none",
+          },
+          y: "100",
+          stagger: 0.1,
+          opacity: 0,
+          ease: "back.out",
+          duration: 0.5,
+        });
+      });
+
+      // why-fincra
+
+      gsap.from("#why-fincra .tease", {
+        scrollTrigger: {
+          trigger: "#why-fincra",
+          start: "top 60%",
+          toggleActions: "restart none none none",
+        },
+        x: 100,
+        stagger: 0.2,
+        opacity: 0,
+        ease: "back.out",
+        duration: 1,
+      });
+
+    });
+
+    mm.add("(min-width: 480px)", () => {
       tl.to("#hero", {
         y: "10%",
         borderRadius: "20px",
@@ -93,7 +134,6 @@ const preloadFincra = () => {
         .to("#preloader", {
           visibility: "hidden",
           duration: 0.5,
-          // onComplete: () => tl.pause()
         })
         .from("#hero #content > div, #hero #content > h4", {
           y: -50,
@@ -104,24 +144,48 @@ const preloadFincra = () => {
 
       ScrollTrigger.create({
         onUpdate: (self) => {
-          productHero.style.top = `${48 + self.progress * 170}%`;
+          productHero.style.top = `${self.progress * 400}%`;
         },
       });
+
+      targetTextElsForFadeUp.forEach((el) => {
+        const splitText = new SplitType(el, { type: "chars, words" });
+        gsap.from(splitText.words, {
+          scrollTrigger: {
+            trigger: el,
+            start: "top 60%",
+            end: "top bottom",
+            toggleActions: "restart none none none",
+          },
+          y: "100",
+          stagger: 0.1,
+          opacity: 0,
+          ease: "back.out",
+          duration: 0.5,
+        });
+      });
+
+      // why-fincra
+
+      gsap.from("#why-fincra .tease", {
+        scrollTrigger: {
+          trigger: "#why-fincra",
+          start: "top 40%",
+          toggleActions: "restart none none none",
+        },
+        x: 100,
+        stagger: 0.2,
+        opacity: 0,
+        ease: "back.out",
+        duration: 1,
+      });
+
     });
   });
-
-  const isChrome = navigator.userAgent.indexOf("Chrome") !== -1;
-  const isSafari = navigator.userAgent.indexOf("Safari") !== -1;
-
-  if (!(isChrome && isSafari)) {
-    if (isSafari) {
-      document.body.classList.add("safari");
-      console.log("is Safari");
-    }
-  }
 };
 
 preloadFincra();
+
 
 const hamburger = document.getElementById("hamburger");
 const navbar = document.getElementById("navbar");
@@ -141,7 +205,7 @@ tl.from(ddlinks, {
 
 // TEXT SPLIT HOVER HAVIMATION
 
-gsap.to(".fade-in", {
+gsap.to(".fade-in-up", {
   opacity: 0,
   duration: 0.5,
 });
@@ -160,29 +224,6 @@ targetElementsForSplits.forEach((button) => {
     });
   });
 });
-
-const targetTextElsForFadeUp = document.querySelectorAll(
-  ".split-text-slide-up"
-);
-
-targetTextElsForFadeUp.forEach((el, i) => {
-  const splitText = new SplitType(el, { type: "chars, words" });
-  gsap.from(splitText.words, {
-    scrollTrigger: {
-      trigger: el,
-      start: "top 60%",
-      end: "top bottom",
-      toggleActions: "restart none none none",
-    },
-    y: "100",
-    stagger: 0.1,
-    opacity: 0,
-    ease: "back.out",
-    duration: 0.5,
-  });
-});
-
-const productHero = document.getElementById("product-hero");
 
 let lastScrollTop = 0;
 window.addEventListener("scroll", () => {
@@ -215,12 +256,10 @@ items.forEach((item, index) => {
     onEnter: () => {
       const videoSrc = item.getAttribute("data-video");
       videoPlayer.setAttribute("src", videoSrc);
-      videoPlayer.play();
     },
     onEnterBack: () => {
       const videoSrc = item.getAttribute("data-video");
       videoPlayer.setAttribute("src", videoSrc);
-      videoPlayer.play();
     },
   });
 });
@@ -266,20 +305,4 @@ gsap.to("[clip-path='url(#__lottie_element_11)']", {
   duration: 6.5,
   repeat: -1,
   ease: "none",
-});
-
-// why-fincra
-
-gsap.from("#why-fincra .tease", {
-  scrollTrigger: {
-    trigger: "#why-fincra",
-    start: "top 20%",
-    end: "top bottom",
-    toggleActions: "restart none none none",
-  },
-  x: 100,
-  stagger: 0.4,
-  opacity: 0,
-  ease: "back.out",
-  duration: 1,
 });
